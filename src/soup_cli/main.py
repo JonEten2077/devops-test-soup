@@ -1,21 +1,22 @@
-import os
 import json
 import tempfile
 import importlib.resources
+from pathlib import Path
 
 def main():
-    print("Запуск Soup CLI...")
-    
-    # ФИКС 3: Используем кроссплатформенный временный путь (работает на Windows и Linux)
-    file_path = os.path.join(tempfile.gettempdir(), "soup_data.txt")
-    with open(file_path, "w") as f:
-        f.write("test")
-        
-    # ФИКС 4: Читаем data.json (теперь он включен в пакет благодаря правкам в pyproject.toml)
-    with importlib.resources.open_text("soup_cli", "data.json") as f:
+    print("Starting Soup CLI...")
+
+    # ФИКС 3: Кроссплатформенный временный путь
+    with tempfile.TemporaryDirectory() as temp_dir:
+        file_path = Path(temp_dir) / "soup_data.txt"
+        file_path.write_text("test")
+
+    # ФИКС 4: Современный и безопасный способ чтения файла из пакета
+    data_file = importlib.resources.files("soup_cli") / "data.json"
+    with data_file.open("r", encoding="utf-8") as f:
         data = json.load(f)
-        
-    print("Успех! Данные:", data)
+
+    print("Success! Data:", data)
 
 if __name__ == "__main__":
     main()
