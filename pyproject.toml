@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "soup-cli"
+version = "0.9.3"
+description = "My test package"
+requires-python = ">=3.10"
+
+[project.scripts]
+soup = "soup_cli.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
