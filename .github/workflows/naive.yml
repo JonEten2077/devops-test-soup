@@ -1,0 +1,21 @@
+name: Naive CI
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest # БАГ: Мы тестируем ТОЛЬКО на Linux
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' # БАГ: Тестируем ТОЛЬКО на 3.11
+          
+      - name: Install dependencies
+        run: |
+          pip install requests # БАГ: Ставим requests руками, хотя его нет в pyproject.toml
+          
+      - name: Run the script
+        run: python src/soup_cli/main.py # Запускаем прямо из исходников, где лежит data.json, поэтому файл находится
