@@ -19,3 +19,5 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 soup_cli = ["*.json"]
+[tool.ruff]
+line-length = 120
