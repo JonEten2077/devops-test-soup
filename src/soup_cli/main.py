@@ -1,7 +1,7 @@
 import importlib.resources
 import json
-import tempfile
 from pathlib import Path
+import tempfile
 
 def main():
     print("Starting Soup CLI...")
