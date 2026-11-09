@@ -18,4 +18,4 @@ jobs:
           pip install requests # БАГ: Ставим requests руками, хотя его нет в pyproject.toml
           
       - name: Run the script
-        run: python src/soup_cli/main.py # Запускаем прямо из исходников, где лежит data.json, поэтому файл находится
+        run: PYTHONPATH=src python -m soup_cli.main # Запускаем прямо из исходников, где лежит data.json, поэтому файл находится
