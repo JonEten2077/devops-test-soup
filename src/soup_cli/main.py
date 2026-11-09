@@ -1,6 +1,6 @@
+import importlib.resources
 import json
 import tempfile
-import importlib.resources
 from pathlib import Path
 
 def main():
