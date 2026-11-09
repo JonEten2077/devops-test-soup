@@ -21,3 +21,4 @@ where = ["src"]
 soup_cli = ["*.json"]
 [tool.ruff]
 line-length = 120
+ignore = ["I001"]
