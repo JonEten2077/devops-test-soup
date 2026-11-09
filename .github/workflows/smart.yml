@@ -34,8 +34,9 @@ jobs:
       - name: Build wheel
         run: python -m build
       - name: Test clean install
+        shell: bash # <--- ВОТ ОНА, ЗДЕСЬ
         run: |
-          # Ставим пакет из собранного файла. Если забыли dependency (БАГ 2) или файл данных (БАГ 4), упадет здесь
+          # Ставим пакет из собранного файла
           pip install dist/*.whl
           soup
 
