@@ -1,0 +1,48 @@
+name: Publish to TestPyPI
+
+on:
+  push:
+    tags:
+      - 'v*' # Запускается ТОЛЬКО при создании тега (например, v0.9.3)
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check tag vs pyproject.toml version
+        run: |
+          # Берем версию из тега (отрезаем 'v' в начале)
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          # Берем версию из pyproject.toml
+          CODE_VERSION=$(grep '^version =' pyproject.toml | head -n1 | cut -d'"' -f2)
+          
+          echo "Tag version: $TAG_VERSION"
+          echo "Code version: $CODE_VERSION"
+          
+          if [ "$TAG_VERSION" != "$CODE_VERSION" ]; then
+            echo "❌ ОШИБКА: Версия в теге ($TAG_VERSION) не совпадает с версией в pyproject.toml ($CODE_VERSION)!"
+            exit 1
+          fi
+          echo "✅ Версии совпадают. Можно публиковать."
+
+  publish:
+    needs: check-version # Запускается только если версии совпали
+    runs-on: ubuntu-latest
+    environment: release # Окружение для OIDC (то, что мы настроили на TestPyPI)
+    permissions:
+      id-token: write # Обязательно для OIDC! Без этого не работает
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build package
+        run: |
+          pip install build
+          python -m build
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
